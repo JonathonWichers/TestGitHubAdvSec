@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.util.HtmlUtils;
 
 @WebServlet(value = "/crypto-00/BenchmarkTest00005")
 public class BenchmarkTest00005 extends HttpServlet {
@@ -99,11 +100,11 @@ public class BenchmarkTest00005 extends HttpServlet {
             response.getWriter()
                     .println(
                             "Sensitive value: '"
-                                    + org.owasp
+                                    + HtmlUtils.htmlEscape(HtmlUtils.htmlUnescape(String.valueOf(org.owasp
                                             .esapi
                                             .ESAPI
                                             .encoder()
-                                            .encodeForHTML(new String(input))
+                                            .encodeForHTML(new String(input)))))
                                     + "' encrypted and stored<br/>");
 
         } catch (java.security.NoSuchAlgorithmException
