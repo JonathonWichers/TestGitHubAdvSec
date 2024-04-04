@@ -67,6 +67,12 @@ public class BenchmarkTest00001 extends HttpServlet {
         java.io.FileInputStream fis = null;
 
         try {
+            // Check if the param is a valid file name
+            // by checking if it starts with alphabet or underscore
+            if (!param.matches("^[a-zA-Z_].*")) {
+                throw new Exception("Invalid file name");
+            }
+
             fileName = org.owasp.benchmark.helpers.Utils.TESTFILES_DIR + param;
             fis = new java.io.FileInputStream(new java.io.File(fileName));
             byte[] b = new byte[1000];
