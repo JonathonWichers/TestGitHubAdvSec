@@ -67,6 +67,11 @@ public class BenchmarkTest00002 extends HttpServlet {
         java.io.FileOutputStream fos = null;
 
         try {
+            // Check if the param value is valid
+            if (!param.matches("^[a-zA-Z0-9._-]+$")) {
+                throw new IllegalArgumentException("Invalid param value: " + param);
+            }
+
             fileName = org.owasp.benchmark.helpers.Utils.TESTFILES_DIR + param;
 
             fos = new java.io.FileOutputStream(fileName, false);
