@@ -43,7 +43,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.crypto.Cipher;
+import javax.crypto.KeyAgreement;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.OAEPParameterSpec;
+import javax.crypto.spec.PSource;
 import javax.net.ssl.SSLContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -401,15 +404,20 @@ public class Utils {
     public static Cipher getCipher() {
         if (cipher == null) {
             try {
+                OAEPParameterSpec oaepParameterSpec =
+                        new OAEPParameterSpec(
+                                "SHA-512",
+                                "MGF1",
+                                MGF1ParameterSpec.SHA512,
+                                PSource.PSpecified.DEFAULT);
                 cipher =
                         javax.crypto.Cipher.getInstance(
                                 "RSA/ECB/OAEPWithSHA-512AndMGF1Padding", "SunJCE");
-                // Prepare the cipher to encrypt
                 java.security.KeyPairGenerator keyGen =
                         java.security.KeyPairGenerator.getInstance("RSA");
                 keyGen.initialize(4096);
                 java.security.PublicKey publicKey = keyGen.genKeyPair().getPublic();
-                cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, publicKey);
+                cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, publicKey, oaepParameterSpec);
             } catch (NoSuchAlgorithmException
                     | NoSuchProviderException
                     | NoSuchPaddingException

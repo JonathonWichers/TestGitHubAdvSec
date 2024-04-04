@@ -57,13 +57,14 @@ public class BenchmarkTest00005 extends HttpServlet {
         //			(byte)0x44, (byte)0x21, (byte)0xC3, (byte)0xC3033
         //		};
         java.security.SecureRandom random = new java.security.SecureRandom();
-        byte[] iv = random.generateSeed(8); // DES requires 8 byte keys
+        byte[] iv = random.generateSeed(16); // DES requires 8 byte keys
 
         try {
-            javax.crypto.Cipher c = javax.crypto.Cipher.getInstance("DES/CBC/PKCS5Padding");
+            // Use a more secure algorithm like AES instead of DES
+            javax.crypto.Cipher c = javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding");
 
             // Prepare the cipher to encrypt
-            javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("DES").generateKey();
+            javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("AES").generateKey();
             java.security.spec.AlgorithmParameterSpec paramSpec =
                     new javax.crypto.spec.IvParameterSpec(iv);
             c.init(javax.crypto.Cipher.ENCRYPT_MODE, key, paramSpec);
@@ -115,7 +116,10 @@ public class BenchmarkTest00005 extends HttpServlet {
             response.getWriter()
                     .println(
                             "Problem executing crypto - javax.crypto.Cipher.getInstance(java.lang.String,java.security.Provider) Test Case");
-            e.printStackTrace(response.getWriter());
+            /*n9*/
+            response.getWriter().append("Error Message: ").append(e.getMessage());
+            /*n10*/
+            response.getWriter().append("Stack Trace: ").append(e.getStackTrace());
             throw new ServletException(e);
         }
     }
