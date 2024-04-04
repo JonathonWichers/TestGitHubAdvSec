@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.util.HtmlUtils;
 
 @WebServlet(value = "/trustbound-00/BenchmarkTest00004")
 public class BenchmarkTest00004 extends HttpServlet {
@@ -69,7 +70,7 @@ public class BenchmarkTest00004 extends HttpServlet {
         response.getWriter()
                 .println(
                         "Item: '"
-                                + org.owasp.benchmark.helpers.Utils.encodeForHTML(param)
+                                + HtmlUtils.htmlEscape(HtmlUtils.htmlUnescape(String.valueOf(org.owasp.benchmark.helpers.Utils.encodeForHTML(param))))
                                 + "' with value: '10340' saved in session.");
     }
 }

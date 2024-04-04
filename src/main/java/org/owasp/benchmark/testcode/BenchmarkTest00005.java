@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.util.HtmlUtils;
 
 @WebServlet(value = "/crypto-00/BenchmarkTest00005")
 public class BenchmarkTest00005 extends HttpServlet {
@@ -57,13 +58,13 @@ public class BenchmarkTest00005 extends HttpServlet {
         //			(byte)0x44, (byte)0x21, (byte)0xC3, (byte)0xC3033
         //		};
         java.security.SecureRandom random = new java.security.SecureRandom();
-        byte[] iv = random.generateSeed(8); // DES requires 8 byte keys
+        byte[] iv = random.generateSeed(16); // DES requires 8 byte keys
 
         try {
-            javax.crypto.Cipher c = javax.crypto.Cipher.getInstance("DES/CBC/PKCS5Padding");
+            javax.crypto.Cipher c = javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding");
 
             // Prepare the cipher to encrypt
-            javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("DES").generateKey();
+            javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("AES").generateKey();
             java.security.spec.AlgorithmParameterSpec paramSpec =
                     new javax.crypto.spec.IvParameterSpec(iv);
             c.init(javax.crypto.Cipher.ENCRYPT_MODE, key, paramSpec);
@@ -99,11 +100,11 @@ public class BenchmarkTest00005 extends HttpServlet {
             response.getWriter()
                     .println(
                             "Sensitive value: '"
-                                    + org.owasp
+                                    + HtmlUtils.htmlEscape(HtmlUtils.htmlUnescape(String.valueOf(org.owasp
                                             .esapi
                                             .ESAPI
                                             .encoder()
-                                            .encodeForHTML(new String(input))
+                                            .encodeForHTML(new String(input)))))
                                     + "' encrypted and stored<br/>");
 
         } catch (java.security.NoSuchAlgorithmException

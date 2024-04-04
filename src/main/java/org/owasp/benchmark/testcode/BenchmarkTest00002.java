@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.util.HtmlUtils;
 
 @WebServlet(value = "/pathtraver-00/BenchmarkTest00002")
 public class BenchmarkTest00002 extends HttpServlet {
@@ -73,7 +74,7 @@ public class BenchmarkTest00002 extends HttpServlet {
             response.getWriter()
                     .println(
                             "Now ready to write to file: "
-                                    + org.owasp.esapi.ESAPI.encoder().encodeForHTML(fileName));
+                                    + HtmlUtils.htmlEscape(HtmlUtils.htmlUnescape(String.valueOf(org.owasp.esapi.ESAPI.encoder().encodeForHTML(fileName)))));
 
         } catch (Exception e) {
             System.out.println("Couldn't open FileOutputStream on file: '" + fileName + "'");
