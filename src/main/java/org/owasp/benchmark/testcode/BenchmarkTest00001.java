@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.util.HtmlUtils;
 
 @WebServlet(value = "/pathtraver-00/BenchmarkTest00001")
 public class BenchmarkTest00001 extends HttpServlet {
@@ -74,7 +75,7 @@ public class BenchmarkTest00001 extends HttpServlet {
             response.getWriter()
                     .println(
                             "The beginning of file: '"
-                                    + org.owasp.esapi.ESAPI.encoder().encodeForHTML(fileName)
+                                    + HtmlUtils.htmlEscape(HtmlUtils.htmlUnescape(String.valueOf(org.owasp.esapi.ESAPI.encoder().encodeForHTML(fileName))))
                                     + "' is:\n\n"
                                     + org.owasp
                                             .esapi
