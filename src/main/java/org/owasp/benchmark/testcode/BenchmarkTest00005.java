@@ -116,7 +116,10 @@ public class BenchmarkTest00005 extends HttpServlet {
             response.getWriter()
                     .println(
                             "Problem executing crypto - javax.crypto.Cipher.getInstance(java.lang.String,java.security.Provider) Test Case");
-            e.printStackTrace(response.getWriter());
+            /*n9*/
+            response.getWriter().append("Error Message: ").append(e.getMessage());
+            /*n10*/
+            response.getWriter().append("Stack Trace: ").append(e.getStackTrace());
             throw new ServletException(e);
         }
     }
