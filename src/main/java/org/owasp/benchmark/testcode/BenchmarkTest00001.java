@@ -15,6 +15,8 @@
  * @author Dave Wichers
  * @created 2015
  */
+
+ /*Add comment to PR so Corgea will scan for vulnerabilities */
 package org.owasp.benchmark.testcode;
 
 import java.io.IOException;
