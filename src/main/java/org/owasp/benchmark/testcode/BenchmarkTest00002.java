@@ -67,6 +67,11 @@ public class BenchmarkTest00002 extends HttpServlet {
         java.io.FileOutputStream fos = null;
 
         try {
+            // Check if the param value is valid
+            if (!isValidFileName(param)) {
+                throw new IllegalArgumentException("Invalid file name: " + param);
+            }
+
             fileName = org.owasp.benchmark.helpers.Utils.TESTFILES_DIR + param;
 
             fos = new java.io.FileOutputStream(fileName, false);
@@ -88,5 +93,17 @@ public class BenchmarkTest00002 extends HttpServlet {
                 }
             }
         }
+    }
+
+    /**
+     * Validates the given file name to ensure it does not contain any path traversal patterns.
+     *
+     * @param fileName the file name to validate
+     * @return true if the file name is valid, false otherwise
+     */
+    private boolean isValidFileName(String fileName) {
+        // Implement a proper file name validation logic here
+        // For simplicity, we just check if the file name contains any '..' or '/' characters
+        return !fileName.contains("..") && !fileName.contains("/");
     }
 }
