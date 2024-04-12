@@ -38,7 +38,7 @@ public class BenchmarkTest00020 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         String param = request.getParameter("BenchmarkTest00020");
@@ -50,20 +50,21 @@ public class BenchmarkTest00020 extends HttpServlet {
         //	    byte[] iv = {
         //	    	(byte)0xB2, (byte)0x12, (byte)0xD5, (byte)0xB2,
         //	    	(byte)0x44, (byte)0x21, (byte)0xC3, (byte)0xC3033
-        //	    };
+        //	    };
         java.security.SecureRandom random = new java.security.SecureRandom();
-        byte[] iv = random.generateSeed(8); // DES requires 8 byte keys
+        byte[] iv = random.generateSeed(16); // DES requires 8 byte keys
 
         try {
+            // Fix the vulnerability by changing the cryptographic algorithm to AES
             javax.crypto.Cipher c =
-                    javax.crypto.Cipher.getInstance("DES/CBC/PKCS5Padding", "SunJCE");
-            // Prepare the cipher to encrypt
-            javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("DES").generateKey();
+                    javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding", "SunJCE");
+            // Prepare the cipher to encrypt
+            javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("AES").generateKey();
             java.security.spec.AlgorithmParameterSpec paramSpec =
                     new javax.crypto.spec.IvParameterSpec(iv);
             c.init(javax.crypto.Cipher.ENCRYPT_MODE, key, paramSpec);
 
-            // encrypt and store the results
+            // encrypt and store the results
             byte[] input = {(byte) '?'};
             Object inputParam = param;
             if (inputParam instanceof String) input = ((String) inputParam).getBytes();
@@ -85,7 +86,7 @@ public class BenchmarkTest00020 extends HttpServlet {
                             new java.io.File(org.owasp.benchmark.helpers.Utils.TESTFILES_DIR),
                             "passwordFile.txt");
             java.io.FileWriter fw =
-                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
+                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
             fw.write(
                     "secret_value="
                             + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)

@@ -38,7 +38,7 @@ public class BenchmarkTest00019 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         java.io.InputStream param = request.getInputStream();
@@ -47,14 +47,14 @@ public class BenchmarkTest00019 extends HttpServlet {
             java.util.Properties benchmarkprops = new java.util.Properties();
             benchmarkprops.load(
                     this.getClass().getClassLoader().getResourceAsStream("benchmark.properties"));
-            String algorithm = benchmarkprops.getProperty("cryptoAlg1", "DESede/ECB/PKCS5Padding");
+            String algorithm = benchmarkprops.getProperty("cryptoAlg1", "PBKDF2WithHmacSHA512");
             javax.crypto.Cipher c = javax.crypto.Cipher.getInstance(algorithm);
 
-            // Prepare the cipher to encrypt
-            javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("DES").generateKey();
+            // Prepare the cipher to encrypt
+            javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("AES").generateKey();
             c.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
 
-            // encrypt and store the results
+            // encrypt and store the results
             byte[] input = {(byte) '?'};
             Object inputParam = param;
             if (inputParam instanceof String) input = ((String) inputParam).getBytes();
@@ -76,7 +76,7 @@ public class BenchmarkTest00019 extends HttpServlet {
                             new java.io.File(org.owasp.benchmark.helpers.Utils.TESTFILES_DIR),
                             "passwordFile.txt");
             java.io.FileWriter fw =
-                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
+                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
             fw.write(
                     "secret_value="
                             + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)

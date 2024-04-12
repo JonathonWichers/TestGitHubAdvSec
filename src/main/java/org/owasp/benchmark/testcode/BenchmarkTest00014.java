@@ -38,18 +38,25 @@ public class BenchmarkTest00014 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         String param = "";
         java.util.Enumeration<String> headers = request.getHeaders("Referer");
 
         if (headers != null && headers.hasMoreElements()) {
-            param = headers.nextElement(); // just grab first element
+            param = headers.nextElement(); // just grab first element
         }
 
-        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
-        param = java.net.URLDecoder.decode(param, "UTF-8");
+        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
+        // param = java.net.URLDecoder.decode(param, "UTF-8");
+        if (param != null && !param.isEmpty()) {
+            param = param.replaceAll("&", "&amp;")
+                         .replaceAll("<", "&lt;")
+                         .replaceAll(">", "&gt;")
+                         .replaceAll("\"", "&quot;")
+                         .replaceAll("'", "&#x27;");
+        }
 
         response.setHeader("X-XSS-Protection", "0");
         Object[] obj = {"a", "b"};

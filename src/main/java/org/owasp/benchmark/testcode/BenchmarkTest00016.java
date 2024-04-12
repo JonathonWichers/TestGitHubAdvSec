@@ -38,17 +38,17 @@ public class BenchmarkTest00016 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         String param = "";
         java.util.Enumeration<String> headers = request.getHeaders("BenchmarkTest00016");
 
         if (headers != null && headers.hasMoreElements()) {
-            param = headers.nextElement(); // just grab first element
+            param = headers.nextElement(); // just grab first element
         }
 
-        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
+        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
         param = java.net.URLDecoder.decode(param, "UTF-8");
 
         byte[] input = new byte[1000];
@@ -66,12 +66,19 @@ public class BenchmarkTest00016 extends HttpServlet {
             str = new String(input, 0, i);
         }
         if ("".equals(str)) str = "No cookie value supplied";
+
+        // Fix starts here
+        if (str.contains(";")) {
+            str = str.substring(0, str.indexOf(";"));
+        }
+        // Fix ends here
+
         javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie("SomeCookie", str);
 
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
         cookie.setPath(request.getRequestURI()); // i.e., set path to JUST this servlet
-        // e.g., /benchmark/sql-01/BenchmarkTest01001
+        // e.g., /benchmark/sql-01/BenchmarkTest01001
         response.addCookie(cookie);
 
         response.getWriter()

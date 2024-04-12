@@ -38,25 +38,27 @@ public class BenchmarkTest00018 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         String param = "";
         java.util.Enumeration<String> headers = request.getHeaders("BenchmarkTest00018");
 
         if (headers != null && headers.hasMoreElements()) {
-            param = headers.nextElement(); // just grab first element
+            param = headers.nextElement(); // just grab first element
         }
 
-        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
+        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
         param = java.net.URLDecoder.decode(param, "UTF-8");
 
-        String sql = "INSERT INTO users (username, password) VALUES ('foo','" + param + "')";
+        // PreparedStatement is used to prevent SQL Injection
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        try (java.sql.PreparedStatement statement = org.owasp.benchmark.helpers.DatabaseHelper.getPreparedStatement(sql)) {
+            // Set the parameters
+            statement.setString(1, "foo");
+            statement.setString(2, param);
 
-        try {
-            java.sql.Statement statement =
-                    org.owasp.benchmark.helpers.DatabaseHelper.getSqlStatement();
-            int count = statement.executeUpdate(sql);
+            int count = statement.executeUpdate();
             org.owasp.benchmark.helpers.DatabaseHelper.outputUpdateComplete(sql, response);
         } catch (java.sql.SQLException e) {
             if (org.owasp.benchmark.helpers.DatabaseHelper.hideSQLErrors) {
