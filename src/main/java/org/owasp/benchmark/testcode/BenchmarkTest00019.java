@@ -38,7 +38,7 @@ public class BenchmarkTest00019 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         java.io.InputStream param = request.getInputStream();
@@ -50,11 +50,11 @@ public class BenchmarkTest00019 extends HttpServlet {
             String algorithm = benchmarkprops.getProperty("cryptoAlg1", "DESede/ECB/PKCS5Padding");
             javax.crypto.Cipher c = javax.crypto.Cipher.getInstance(algorithm);
 
-            // Prepare the cipher to encrypt
+            // Prepare the cipher to encrypt
             javax.crypto.SecretKey key = javax.crypto.KeyGenerator.getInstance("DES").generateKey();
             c.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
 
-            // encrypt and store the results
+            // encrypt and store the results
             byte[] input = {(byte) '?'};
             Object inputParam = param;
             if (inputParam instanceof String) input = ((String) inputParam).getBytes();
@@ -76,7 +76,7 @@ public class BenchmarkTest00019 extends HttpServlet {
                             new java.io.File(org.owasp.benchmark.helpers.Utils.TESTFILES_DIR),
                             "passwordFile.txt");
             java.io.FileWriter fw =
-                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
+                    new java.io.FileWriter(fileTarget, true); // the true will append the new data
             fw.write(
                     "secret_value="
                             + org.owasp.esapi.ESAPI.encoder().encodeForBase64(result, true)
@@ -100,7 +100,13 @@ public class BenchmarkTest00019 extends HttpServlet {
             response.getWriter()
                     .println(
                             "Problem executing crypto - javax.crypto.Cipher.getInstance(java.lang.String,java.security.Provider) Test Case");
-            e.printStackTrace(response.getWriter());
+            /*n6*/
+            response.getWriter().println("Exception: " + e.getMessage());
+            /*n7*/
+            response.getWriter().println("Stack trace: ");
+            /*n8*/
+            e.printStackTrace(new java.io.PrintWriter(response.getOutputStream()));
+            /*n9*/
             throw new ServletException(e);
         }
     }

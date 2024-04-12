@@ -22,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.text.StringEscapeUtils;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(value = "/cmdi-00/BenchmarkTest00017")
@@ -60,7 +61,7 @@ public class BenchmarkTest00017 extends HttpServlet {
         Runtime r = Runtime.getRuntime();
 
         try {
-            Process p = r.exec(cmd + param);
+            Process p = r.exec(cmd + StringEscapeUtils.escapeXSI(param));
             org.owasp.benchmark.helpers.Utils.printOSCommandResults(p, response);
         } catch (IOException e) {
             System.out.println("Problem executing cmdi - TestCase");

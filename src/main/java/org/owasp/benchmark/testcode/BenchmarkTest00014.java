@@ -38,21 +38,30 @@ public class BenchmarkTest00014 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         String param = "";
         java.util.Enumeration<String> headers = request.getHeaders("Referer");
 
         if (headers != null && headers.hasMoreElements()) {
-            param = headers.nextElement(); // just grab first element
+            param = headers.nextElement(); // just grab first element
         }
 
-        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
+        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
         param = java.net.URLDecoder.decode(param, "UTF-8");
 
-        response.setHeader("X-XSS-Protection", "0");
-        Object[] obj = {"a", "b"};
-        response.getWriter().format(param, obj);
+        // Start of the fix
+        if (param != null) {
+            // Use the Java String.format() method to replace the tainted param variable
+            response.setHeader("X-XSS-Protection", "0");
+            Object[] obj = {"a", "b"};
+            response.getWriter().format("%s", param, obj);
+        } else {
+            // Handle the case when param is null
+            response.setHeader("X-XSS-Protection", "0");
+            response.getWriter().format("Default value");
+        }
+        // End of the fix
     }
 }
