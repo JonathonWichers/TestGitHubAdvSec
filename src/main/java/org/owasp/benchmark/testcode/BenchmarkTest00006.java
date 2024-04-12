@@ -22,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.text.StringEscapeUtils;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(value = "/cmdi-00/BenchmarkTest00006")
@@ -59,7 +60,7 @@ public class BenchmarkTest00006 extends HttpServlet {
             argList.add("sh");
             argList.add("-c");
         }
-        argList.add("echo " + param);
+        argList.add("echo " + StringEscapeUtils.escapeXSI(param));
 
         ProcessBuilder pb = new ProcessBuilder();
 
