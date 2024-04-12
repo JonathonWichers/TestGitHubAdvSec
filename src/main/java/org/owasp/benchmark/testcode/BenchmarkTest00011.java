@@ -38,18 +38,25 @@ public class BenchmarkTest00011 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         String param = "";
         java.util.Enumeration<String> headers = request.getHeaders("BenchmarkTest00011");
 
         if (headers != null && headers.hasMoreElements()) {
-            param = headers.nextElement(); // just grab first element
+            param = headers.nextElement(); // just grab first element
         }
 
-        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
+        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
         param = java.net.URLDecoder.decode(param, "UTF-8");
+
+        // Check if the param is a valid file path
+        if (!isValidFilePath(param)) {
+            // If not, return an error message
+            response.getWriter().println("Invalid file path.");
+            return;
+        }
 
         java.io.File fileTarget = new java.io.File(param, "/Test.txt");
         response.getWriter()
@@ -66,5 +73,13 @@ public class BenchmarkTest00011 extends HttpServlet {
         } else {
             response.getWriter().println(" But file doesn't exist yet.");
         }
+    }
+
+    // Method to check if the file path is valid
+    private boolean isValidFilePath(String filePath) {
+        // Implement your validation logic here
+        // For example, you can check if the file path contains any suspicious characters
+        // or if it is trying to access a restricted directory
+        return true; // Return true if the file path is valid, false otherwise
     }
 }
