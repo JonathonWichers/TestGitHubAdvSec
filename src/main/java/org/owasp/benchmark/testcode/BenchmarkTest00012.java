@@ -38,18 +38,24 @@ public class BenchmarkTest00012 extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // some code
+        // some code
         response.setContentType("text/html;charset=UTF-8");
 
         String param = "";
         java.util.Enumeration<String> headers = request.getHeaders("BenchmarkTest00012");
 
         if (headers != null && headers.hasMoreElements()) {
-            param = headers.nextElement(); // just grab first element
+            param = headers.nextElement(); // just grab first element
         }
 
-        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
+        // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
         param = java.net.URLDecoder.decode(param, "UTF-8");
+
+        // Fix starts here
+        if (param != null) {
+            param = param.replaceAll("\\(", "\\\\\\(").replaceAll("\\)", "\\\\\\)");
+        }
+        // Fix ends here
 
         org.owasp.benchmark.helpers.LDAPManager ads = new org.owasp.benchmark.helpers.LDAPManager();
         try {
@@ -83,7 +89,7 @@ public class BenchmarkTest00012 extends HttpServlet {
                                             + "Address: "
                                             + attr2.get()
                                             + "<br>");
-                    // System.out.println("record found " + attr.get());
+                    // System.out.println("record found " + attr.get());
                     found = true;
                 }
             }
