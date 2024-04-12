@@ -401,9 +401,10 @@ public class Utils {
     public static Cipher getCipher() {
         if (cipher == null) {
             try {
+                /*n10*/
                 cipher =
                         javax.crypto.Cipher.getInstance(
-                                "RSA/ECB/OAEPWithSHA-512AndMGF1Padding", "SunJCE");
+                                "AES/GCM/NoPadding", "SunJCE");
                 // Prepare the cipher to encrypt
                 java.security.KeyPairGenerator keyGen =
                         java.security.KeyPairGenerator.getInstance("RSA");
